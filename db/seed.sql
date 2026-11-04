@@ -39,3 +39,14 @@ CREATE TABLE lab_progress (
   solved_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (student, slug, level)
 );
+
+CREATE TABLE invoices (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  owner_uid INT NOT NULL,
+  detail VARCHAR(255) NOT NULL
+);
+INSERT INTO invoices (owner_uid, detail) VALUES
+  (1, 'Admin corporate card ending 4242. Note: FORGE-INVOICE{idor_exposed_another_users_record}'),
+  (2, 'Alice order: Anvil Mechanical Keyboard, 129.00'),
+  (2, 'Alice order: Ember Wireless Mouse, 59.00'),
+  (3, 'Bob order: Crucible USB-C Dock, 89.00');

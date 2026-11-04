@@ -2,5 +2,5 @@
 require __DIR__ . '/engine.php';
 $tpl = $_GET['tpl'] ?? 'Hello {{7*7}}';
 // Medium: block the obvious command functions.
-$rendered = ssti_render($tpl, ['system', 'exec', 'shell_exec', 'passthru', '`']);
+$rendered = ssti_render($tpl, ['system', 'exec', 'shell_exec', 'passthru', '`']); // @sink
 require __DIR__ . '/view.php';

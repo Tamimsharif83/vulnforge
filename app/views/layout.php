@@ -17,6 +17,7 @@
     <a class="brand" href="/">VulnForge</a>
     <nav>
       <a href="/">Labs</a>
+      <a href="/learn">Learn</a>
       <button type="button" id="theme-toggle" class="ghost">Theme</button>
     </nav>
   </header>

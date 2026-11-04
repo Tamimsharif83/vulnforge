@@ -8,6 +8,8 @@ $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
 
 if ($path === '/') {
     render('dashboard', ['labs' => Lab::all(), 'solved' => Lab::solvedLevels()]);
+} elseif ($path === '/learn') {
+    render('learn', ['labs' => Lab::all()]);
 } elseif (preg_match('#^/labs/([a-z0-9-]+)$#', $path, $m) && ($lab = Lab::find($m[1]))) {
     render('workspace', ['lab' => $lab, 'solved' => Lab::solvedLevels()[$m[1]] ?? []]);
 } elseif (preg_match('#^/labs/([a-z0-9-]+)/run$#', $path, $m) && Lab::find($m[1])) {

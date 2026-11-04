@@ -93,3 +93,10 @@ summary { cursor: pointer; }
 }
 .trace-label { margin: 0 0 6px; font-weight: 600; font-size: 13px; letter-spacing: .02em; }
 .trace-event .muted { color: var(--muted); }
+.prose { max-width: 90ch; }
+.prose h2 { margin-top: 28px; }
+.prose ol, .prose ul { padding-left: 20px; }
+.prose li { margin: 6px 0; }
+table.map { width: 100%; border-collapse: collapse; margin-top: 10px; }
+table.map th, table.map td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.map th { color: var(--muted); font-weight: 600; }

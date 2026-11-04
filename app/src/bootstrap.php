@@ -4,6 +4,7 @@ declare(strict_types=1);
 const LEVELS = ['low', 'medium', 'high', 'secure'];
 const LABS_DIR = __DIR__ . '/../labs';
 const TRACE_DIR = '/tmp/vf-traces';
+const SECRET_FILE = '/opt/forge/flag.txt';
 
 session_name('forge_session');
 session_start();

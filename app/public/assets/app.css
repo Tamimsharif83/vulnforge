@@ -91,3 +91,5 @@ summary { cursor: pointer; }
   .feature iframe { min-height: 360px; }
   .lab-head { flex-direction: column; }
 }
+.trace-label { margin: 0 0 6px; font-weight: 600; font-size: 13px; letter-spacing: .02em; }
+.trace-event .muted { color: var(--muted); }

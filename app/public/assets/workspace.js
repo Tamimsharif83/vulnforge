@@ -44,6 +44,19 @@ function renderTrace(trace) {
   for (const event of trace.events) {
     const block = document.createElement('div');
     block.className = 'trace-event';
+    if (event.label) {
+      const label = document.createElement('p');
+      label.className = 'trace-label';
+      label.textContent = event.label;
+      block.append(label);
+    }
+    if (event.type === 'note') {
+      const note = document.createElement('p');
+      note.textContent = event.text;
+      block.append(note);
+      root.append(block);
+      continue;
+    }
     const code = document.createElement('pre');
     code.className = 'code';
     if (event.mark) {
@@ -62,6 +75,12 @@ function renderTrace(trace) {
       const bound = event.params ? ` Bound values, sent separately from the query: ${JSON.stringify(event.params)}.` : '';
       meta.textContent = `${event.rows} rows in ${event.ms} ms.${bound}`;
       block.append(meta);
+    }
+    if (event.note) {
+      const note = document.createElement('p');
+      note.className = 'muted';
+      note.textContent = event.note;
+      block.append(note);
     }
     if (event.error) {
       const error = document.createElement('p');

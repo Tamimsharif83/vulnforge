@@ -28,6 +28,11 @@ final class Console
         if (!isset($headers['cookie']) && !empty($_SERVER['HTTP_COOKIE'])) {
             $headers['cookie'] = ['Cookie', $_SERVER['HTTP_COOKIE']];
         }
+        // Multipart parsing needs CRLF between part headers; a textarea gives LF.
+        // Add the CR where it is missing; bodies that already use CRLF are untouched.
+        if (isset($headers['content-type']) && str_contains(strtolower($headers['content-type'][1]), 'multipart/form-data')) {
+            $body = preg_replace('/(?<!\r)\n/', "\r\n", $body);
+        }
         if ($body !== '') {
             $headers['content-length'] = ['Content-Length', (string) strlen($body)];
         }

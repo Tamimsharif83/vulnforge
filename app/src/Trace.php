@@ -32,6 +32,23 @@ final class Trace
         self::$events[] = ['type' => 'note', 'text' => $text];
     }
 
+    /**
+     * A labeled step for the What Happened tab: $label names the sink, $text is
+     * what the server built or resolved, and $input (if given and present in
+     * $text) is highlighted so the student sees exactly which bytes were theirs.
+     */
+    public static function step(string $label, string $text, string $input = '', string $note = ''): void
+    {
+        $start = $input === '' ? false : strpos($text, $input);
+        self::$events[] = [
+            'type' => 'step',
+            'label' => $label,
+            'text' => $text,
+            'mark' => $start === false ? null : [$start, $start + strlen($input)],
+            'note' => $note,
+        ];
+    }
+
     public static function save(string $slug, string $level): void
     {
         if (self::$id === null) {

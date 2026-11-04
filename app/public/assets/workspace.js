@@ -124,6 +124,14 @@ async function send() {
     showTab('trace');
   }
 }
+window.addEventListener('message', (event) => {
+  if (event.data === 'vf-solved') {
+    $('debrief').hidden = false;
+    document.querySelector(`.levels [data-level="${level}"]`).classList.add('solved');
+    showTab('trace');
+    $('trace').insertAdjacentHTML('afterbegin', '<p class="trace-label">Solved: your script executed in the live feature.</p>');
+  }
+});
 $('send').addEventListener('click', send);
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) send();

@@ -13,6 +13,7 @@ require __DIR__ . '/Db.php';
 require __DIR__ . '/Trace.php';
 require __DIR__ . '/Lab.php';
 require __DIR__ . '/Console.php';
+require __DIR__ . '/xss.php';
 
 function e(?string $value): string
 {
@@ -28,12 +29,19 @@ function current_level(): string
 // Progress follows the student, not whichever ForgeShop account a lab logs into.
 function student_id(): string
 {
+    // Memoized: setcookie does not populate $_COOKIE for the current request, so
+    // without caching every call in one request would mint a different id.
+    static $cached = null;
+    if ($cached !== null) {
+        return $cached;
+    }
     $id = $_COOKIE['vf_student'] ?? '';
     if (!preg_match('/^[a-f0-9]{32}$/', $id)) {
         $id = bin2hex(random_bytes(16));
         setcookie('vf_student', $id, ['expires' => time() + 31536000, 'path' => '/', 'samesite' => 'Lax', 'httponly' => true]);
+        $_COOKIE['vf_student'] = $id;
     }
-    return $id;
+    return $cached = $id;
 }
 
 function render(string $view, array $vars = []): void

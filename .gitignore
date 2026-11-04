@@ -1,0 +1,21 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Runtime data
+data/
+db_data/
+*.log
+app/public/uploads/*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

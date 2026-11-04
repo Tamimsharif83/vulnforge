@@ -1,0 +1,69 @@
+# VulnForge is intentionally vulnerable. Run it only on your own machine.
+#
+# Containment model:
+#   - `labnet` is an internal Docker network, so nothing attached only to it
+#     has a route to the internet. The app and database live here.
+#   - `edge` is the single bridge between the host and labnet. It is a plain
+#     reverse proxy and the only service with a published port, bound to
+#     127.0.0.1 so it is unreachable from other machines.
+name: vulnforge
+
+services:
+  edge:
+    image: nginx:stable
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${VULNFORGE_PORT:-8080}:80"
+    volumes:
+      - ./docker/edge/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - hostlink
+      - labnet
+    depends_on:
+      app:
+        condition: service_started
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_NAME: forgeshop
+      DB_USER: forge
+      DB_PASS: forge-local-only
+    networks:
+      - labnet
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: forgeshop
+      MARIADB_USER: forge
+      MARIADB_PASSWORD: forge-local-only
+      MARIADB_ROOT_PASSWORD: forge-root-local-only
+    volumes:
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/01-seed.sql:ro
+      - db_data:/var/lib/mysql
+    networks:
+      - labnet
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+networks:
+  hostlink:
+    driver: bridge
+  labnet:
+    driver: bridge
+    internal: true
+
+volumes:
+  db_data:

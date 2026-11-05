@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <title>ForgeShop Theme</title>
 <link rel="stylesheet" href="/assets/shop.css">
+<?= shop_header('Account') ?>
 <h1>Theme preview</h1>
 <p>Enter a theme label; it is rendered live below.</p>
 <form onsubmit="apply();return false;">

@@ -53,6 +53,20 @@ function render(string $view, array $vars = []): void
     require __DIR__ . '/../views/layout.php';
 }
 
+/** Shared ForgeShop storefront chrome for the live lab features. */
+function shop_header(string $active = 'Shop'): string
+{
+    $nav = ['Shop', 'Blog', 'Deals', 'Account'];
+    $links = '';
+    foreach ($nav as $item) {
+        $cls = $item === $active ? ' class="active"' : '';
+        $links .= "<a$cls>" . e($item) . '</a>';
+    }
+    return '<header class="shop-top"><a class="shop-brand" href="#">ForgeShop</a>'
+        . "<nav class=\"shop-nav\">$links</nav>"
+        . '<div class="shop-cart"><span class="cart-dot">2</span> Cart</div></header><main>';
+}
+
 function json_out(array $data, int $status = 200): void
 {
     http_response_code($status);

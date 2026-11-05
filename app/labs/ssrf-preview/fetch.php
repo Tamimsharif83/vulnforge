@@ -17,7 +17,7 @@ function ssrf_show(string $body): void
             Lab::markSolved('ssrf-preview', current_level());
         }
     }
-    echo '<!DOCTYPE html><title>Link preview</title><link rel="stylesheet" href="/assets/shop.css">';
+    echo '<!DOCTYPE html><title>Link preview</title><link rel="stylesheet" href="/assets/shop.css">' . shop_header('Account') . '';
     echo '<h1>Link preview</h1><form action="/labs/ssrf-preview/run"><input name="url" value="' . e($_GET['url'] ?? '') . '" style="flex:1"><button>Preview</button></form>';
     echo '<pre>' . e($body) . '</pre>';
 }

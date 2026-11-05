@@ -11,6 +11,7 @@ if ($ok && md5($submitted) !== ($user['password_md5'] ?? '')) {
 <!DOCTYPE html>
 <title>ForgeShop Login</title>
 <link rel="stylesheet" href="/assets/shop.css">
+<?= shop_header('Account') ?>
 <h1>Sign in</h1>
 <?php if ($ok): ?>
   <p>Signed in as <strong><?= e($user['username']) ?></strong> (role: <?= e($user['role']) ?>).</p>

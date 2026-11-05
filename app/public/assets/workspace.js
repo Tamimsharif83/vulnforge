@@ -118,16 +118,64 @@ async function send() {
   if (traceId) {
     renderTrace(await fetch(`/trace/${traceId[1]}`).then((response) => response.json()));
   }
+  // Mirror the attack into the live feature pane so you see the rendered effect
+  // (for XSS, the payload actually executes there).
+  syncFeature();
   if (/^x-vf-solved:/im.test(head)) {
-    $('debrief').hidden = false;
-    document.querySelector(`.levels [data-level="${level}"]`).classList.add('solved');
+    markSolved();
     showTab('trace');
   }
 }
+
+// Reflect the console request in the live feature. A GET to this lab's endpoint
+// navigates the pane to that URL; anything else reloads it so stored or
+// state-changing effects become visible.
+function syncFeature() {
+  const frame = document.querySelector('.feature iframe');
+  if (!frame) return;
+  const method = $('method').value.toUpperCase();
+  const path = $('path').value;
+  if (method === 'GET' && path.startsWith(`/labs/${slug}/`)) {
+    frame.src = path;
+  } else {
+    frame.src = frame.src;
+  }
+}
+
+let solvedShown = false;
+function markSolved() {
+  $('debrief').hidden = false;
+  document.querySelector(`.levels [data-level="${level}"]`).classList.add('solved');
+  if (!solvedShown) {
+    solvedShown = true;
+    showSolvedToast();
+  }
+}
+
+// A calm, clearly-visible success toast. No confetti; it slides in, holds, and
+// dismisses itself, and the solved level also turns green.
+function showSolvedToast() {
+  const title = document.querySelector('.lab-head h1')?.textContent ?? 'Lab';
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.setAttribute('role', 'status');
+  toast.innerHTML =
+    '<svg class="toast-check" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11"/>' +
+    '<path d="M7 12.5l3.2 3.2L17 9" fill="none"/></svg>' +
+    '<div><p class="toast-title">Solved</p>' +
+    `<p class="toast-sub">${title} · ${level} level</p></div>`;
+  document.body.append(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    setTimeout(() => toast.remove(), 800);
+  }, 4200);
+}
+
 window.addEventListener('message', (event) => {
   if (event.data === 'vf-solved') {
-    $('debrief').hidden = false;
-    document.querySelector(`.levels [data-level="${level}"]`).classList.add('solved');
+    markSolved();
     showTab('trace');
     $('trace').insertAdjacentHTML('afterbegin', '<p class="trace-label">Solved: your script executed in the live feature.</p>');
   }

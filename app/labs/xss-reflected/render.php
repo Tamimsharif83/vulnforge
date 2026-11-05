@@ -8,6 +8,7 @@ Trace::step('Reflected sink and context', $body, $raw ?? ($_GET['q'] ?? ''), $co
 <!DOCTYPE html>
 <title>ForgeShop Search</title>
 <link rel="stylesheet" href="/assets/shop.css">
+<?= shop_header('Shop') ?>
 <h1>Search</h1>
 <form action="/labs/xss-reflected/run"><input name="q" value="<?= e($_GET['q'] ?? '') ?>"><button>Search</button></form>
 <?= $body ?>

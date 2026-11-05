@@ -19,6 +19,7 @@ Trace::step('Rendered review HTML (sink)', $html !== '' ? $html : '(no reviews y
 <!DOCTYPE html>
 <title>ForgeShop Reviews</title>
 <link rel="stylesheet" href="/assets/shop.css">
+<?= shop_header('Blog') ?>
 <h1>Anvil Mechanical Keyboard</h1>
 <h2>Reviews</h2>
 <ul><?= $html ?></ul>

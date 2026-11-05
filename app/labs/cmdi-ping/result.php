@@ -9,6 +9,7 @@ if (str_contains($output, trim((string) @file_get_contents(SECRET_FILE)))) {
 <!DOCTYPE html>
 <title>ForgeShop Status</title>
 <link rel="stylesheet" href="/assets/shop.css">
+<?= shop_header('Account') ?>
 <h1>Connectivity check</h1>
 <form action="/labs/cmdi-ping/run">
   <input name="host" value="<?= e($_GET['host'] ?? '') ?>" placeholder="Host or IP">

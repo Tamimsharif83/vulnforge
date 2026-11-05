@@ -9,6 +9,7 @@ if ($elapsedMs > 1500) {
 <!DOCTYPE html>
 <title>ForgeShop Signup</title>
 <link rel="stylesheet" href="/assets/shop.css">
+<?= shop_header('Account') ?>
 <h1>Choose a username</h1>
 <form action="/labs/sqli-blind/run"><input name="username" value="<?= e($_GET['username'] ?? '') ?>"><button>Check</button></form>
 <p><?= $taken ? 'That username is taken.' : 'That username is available.' ?></p>

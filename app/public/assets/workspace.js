@@ -142,6 +142,60 @@ function syncFeature() {
   }
 }
 
+// Capture actions taken inside the live feature (form submits, link clicks) and
+// route them through the Attack Console, so any interaction in the website shows
+// up as a request and response there, just like a proxy would record it.
+function loadIntoConsole({ method, path, headers, body }) {
+  $('method').value = method;
+  $('path').value = path;
+  $('headers').value = headers || '';
+  $('body').value = body || '';
+  showTab('console');
+  send();
+}
+
+function captureFeatureActions() {
+  const frame = document.querySelector('.feature iframe');
+  let doc;
+  try { doc = frame.contentDocument; } catch (e) { return; } // same-origin only
+  if (!doc || doc.__vfCapture) return;
+  doc.__vfCapture = true;
+  const here = frame.contentWindow.location.href;
+
+  doc.addEventListener('submit', (event) => {
+    const form = event.target;
+    if (!form || form.tagName !== 'FORM') return;
+    if ((form.enctype || '').includes('multipart')) return; // file uploads use the console
+    event.preventDefault();
+    const method = (form.getAttribute('method') || 'GET').toUpperCase();
+    const action = new URL(form.getAttribute('action') || frame.contentWindow.location.pathname, here);
+    const fields = new URLSearchParams(new FormData(form)).toString();
+    if (method === 'GET') {
+      loadIntoConsole({ method, path: action.pathname + (fields ? '?' + fields : '') });
+    } else {
+      loadIntoConsole({ method, path: action.pathname, headers: 'Content-Type: application/x-www-form-urlencoded', body: fields });
+    }
+  }, true);
+
+  doc.addEventListener('click', (event) => {
+    const link = event.target.closest && event.target.closest('a');
+    if (!link) return;
+    const href = link.getAttribute('href') || '';
+    if (!href || href.startsWith('#') || href.toLowerCase().startsWith('javascript:')) return;
+    const url = new URL(href, here);
+    if (!url.pathname.startsWith(`/labs/${slug}/`)) return; // only this lab's endpoints
+    event.preventDefault();
+    loadIntoConsole({ method: 'GET', path: url.pathname + url.search });
+  }, true);
+}
+
+(function wireFeatureCapture() {
+  const frame = document.querySelector('.feature iframe');
+  if (!frame) return;
+  frame.addEventListener('load', captureFeatureActions);
+  captureFeatureActions(); // in case it is already loaded
+})();
+
 let solvedShown = false;
 function markSolved() {
   $('debrief').hidden = false;

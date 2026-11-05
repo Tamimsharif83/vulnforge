@@ -200,13 +200,24 @@ fetch(`/labs/${slug}/source`).then((response) => response.json()).then((data) =>
   if (localStorage.getItem(key)) unlock();
 
   const hints = document.querySelectorAll('[data-panel="hints"] details');
+  const progress = $('hint-progress');
   const opened = new Set();
+  const refresh = () => {
+    if (progress) progress.textContent = String(opened.size);
+    if (hints.length && opened.size >= hints.length) unlock();
+  };
   hints.forEach((hint, i) => {
+    if (hint.open) opened.add(i); // count any that are already open
     hint.addEventListener('toggle', () => {
       if (hint.open) opened.add(i);
-      if (hints.length && opened.size >= hints.length) unlock();
+      refresh();
     });
   });
+  refresh();
+
+  // Fallback so no one is ever stuck if they missed a hint.
+  const reveal = $('reveal-anyway');
+  if (reveal) reveal.addEventListener('click', unlock);
 
   const run = $('run-solution');
   if (run) {

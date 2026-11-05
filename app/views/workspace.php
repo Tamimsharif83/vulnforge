@@ -58,6 +58,7 @@
     </div>
 
     <div class="tab" data-panel="hints" hidden>
+      <?php if ($solution): ?><p class="muted">Open all <?= count($lab['hints']) ?> hints to unlock the Solution tab.</p><?php endif; ?>
       <?php foreach ($lab['hints'] as $i => $hint): ?>
         <details><summary>Hint <?= $i + 1 ?></summary><p><?= e($hint) ?></p></details>
       <?php endforeach; ?>
@@ -78,6 +79,8 @@
       <div id="solution-locked" class="debrief">
         <h3>Solution locked</h3>
         <p>Try the hints first. Open every hint in the Hints tab and the full solution for the <strong><?= e($level) ?></strong> level unlocks here: the exact steps, why each one works, and a button that runs the exploit live so you can watch it succeed.</p>
+        <p class="muted">Hints opened: <span id="hint-progress">0</span> of <?= count($lab['hints']) ?>.</p>
+        <p><button type="button" id="reveal-anyway" class="ghost">Reveal the solution now</button></p>
       </div>
       <div id="solution-body" hidden>
         <h3>Solving the <?= e($level) ?> level</h3>

@@ -4,7 +4,7 @@
 ?>
 <!DOCTYPE html>
 <title>ForgeShop Theme</title>
-<link rel="stylesheet" href="/assets/shop.css">
+<link rel="stylesheet" href="/assets/shop.css?v=2">
 <?= shop_header('Account') ?>
 <h1>Theme preview</h1>
 <p>Enter a theme label; it is rendered live below.</p>

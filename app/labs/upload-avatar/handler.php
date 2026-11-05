@@ -29,7 +29,7 @@ Trace::note($result);
 ?>
 <!DOCTYPE html>
 <title>ForgeShop Profile</title>
-<link rel="stylesheet" href="/assets/shop.css">
+<link rel="stylesheet" href="/assets/shop.css?v=2">
 <?= shop_header('Account') ?>
 <h1>Profile avatar</h1>
 <p><?= e($result) ?></p>

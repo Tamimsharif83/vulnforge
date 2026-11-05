@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= e($title ?? 'VulnForge') ?></title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="/assets/app.css">
+  <link rel="stylesheet" href="/assets/app.css?v=2">
   <script>
     const savedTheme = localStorage.getItem('vf-theme');
     if (savedTheme) document.documentElement.dataset.theme = savedTheme;
@@ -22,6 +22,6 @@
     </nav>
   </header>
   <main><?= $content ?></main>
-  <script src="/assets/app.js"></script>
+  <script src="/assets/app.js?v=2"></script>
 </body>
 </html>

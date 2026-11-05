@@ -7,7 +7,7 @@ if (is_array($claims) && ($claims['role'] ?? '') === 'admin') {
     Trace::note('Accepted a token asserting role=admin. The server never issues admin tokens, so this is a forgery.');
 }
 header('Content-Type: text/html');
-echo '<!DOCTYPE html><title>ForgeShop API</title><link rel="stylesheet" href="/assets/shop.css">' . shop_header('Account') . '<h1>Account API</h1>';
+echo '<!DOCTYPE html><title>ForgeShop API</title><link rel="stylesheet" href="/assets/shop.css?v=2">' . shop_header('Account') . '<h1>Account API</h1>';
 if (is_array($claims)) {
     echo '<p>Authenticated as <strong>' . e($claims['user'] ?? '?') . '</strong>, role <strong>' . e($claims['role'] ?? '?') . '</strong>.';
     echo ($claims['role'] ?? '') === 'admin' ? ' Admin panel unlocked.</p>' : '</p>';

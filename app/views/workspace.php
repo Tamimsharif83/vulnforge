@@ -106,4 +106,4 @@
     <?php endif; ?>
   </section>
 </div>
-<script src="/assets/workspace.js"></script>
+<script src="/assets/workspace.js?v=2"></script>

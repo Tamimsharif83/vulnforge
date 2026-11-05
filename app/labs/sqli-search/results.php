@@ -13,7 +13,7 @@ $looksLikeProduct = static fn (array $r): bool =>
 ?>
 <!DOCTYPE html>
 <title>ForgeShop Search</title>
-<link rel="stylesheet" href="/assets/shop.css">
+<link rel="stylesheet" href="/assets/shop.css?v=2">
 <?= shop_header('Shop') ?>
   <h1>Browse the catalog</h1>
   <p class="lede">Hot-swappable keyboards, docks, and desk gear, forged for your setup.</p>

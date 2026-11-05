@@ -24,6 +24,9 @@
       <?php foreach (['console' => 'Attack Console', 'trace' => 'What Happened', 'source' => 'Source', 'hints' => 'Hints', 'fix' => 'Fix', 'report' => 'Report'] as $id => $label): ?>
         <button type="button" role="tab" data-tab="<?= $id ?>"><?= $label ?></button>
       <?php endforeach; ?>
+      <?php if ($solution): ?>
+        <button type="button" role="tab" data-tab="solution" id="solution-tab" class="locked" title="Open every hint to unlock">Solution</button>
+      <?php endif; ?>
     </div>
 
     <div class="tab" data-panel="console">
@@ -69,6 +72,35 @@
     <div class="tab prose" data-panel="report" hidden>
       <pre class="code wrap"><?= e($lab['report']) ?></pre>
     </div>
+
+    <?php if ($solution): ?>
+    <div class="tab prose" data-panel="solution" hidden>
+      <div id="solution-locked" class="debrief">
+        <h3>Solution locked</h3>
+        <p>Try the hints first. Open every hint in the Hints tab and the full solution for the <strong><?= e($level) ?></strong> level unlocks here: the exact steps, why each one works, and a button that runs the exploit live so you can watch it succeed.</p>
+      </div>
+      <div id="solution-body" hidden>
+        <h3>Solving the <?= e($level) ?> level</h3>
+        <p><?= e($solution['goal']) ?></p>
+        <h3>Steps</h3>
+        <ol class="sol-steps">
+          <?php foreach ($solution['steps'] as $step): ?><li><?= e($step) ?></li><?php endforeach; ?>
+        </ol>
+        <h3>Why this works</h3>
+        <p><?= e($solution['why']) ?></p>
+        <?php if (!empty($solution['run'])): ?>
+          <h3>See it happen</h3>
+          <p><?= $level === 'secure'
+              ? 'Run the same exploit against the Secure level and watch it fail. The What Happened tab shows why the server refused it.'
+              : 'Run the exploit now. It loads the real request into the Attack Console, sends it to the live server, and shows what happened — the same effect that marks the level solved.' ?></p>
+          <button type="button" id="run-solution" class="primary" data-run='<?= e(json_encode($solution['run'], JSON_UNESCAPED_SLASHES | JSON_HEX_APOS | JSON_HEX_QUOT)) ?>'>
+            <?= $level === 'secure' ? 'Run it against Secure' : 'Run the exploit' ?>
+          </button>
+          <p class="status" id="run-status"></p>
+        <?php endif; ?>
+      </div>
+    </div>
+    <?php endif; ?>
   </section>
 </div>
 <script src="/assets/workspace.js"></script>

@@ -25,8 +25,28 @@ final class Console
             }
         }
         $headers['host'] ??= ['Host', $_SERVER['HTTP_HOST'] ?? 'localhost'];
-        if (!isset($headers['cookie']) && !empty($_SERVER['HTTP_COOKIE'])) {
-            $headers['cookie'] = ['Cookie', $_SERVER['HTTP_COOKIE']];
+        // Carry the lab session forward. If the student set their own Cookie
+        // header (e.g. a crafted prefs cookie), merge the session's cookies in
+        // rather than dropping them, so the level and student identity persist.
+        $session = [];
+        foreach (explode(';', $_SERVER['HTTP_COOKIE'] ?? '') as $pair) {
+            if (str_contains($pair, '=')) {
+                [$name] = explode('=', trim($pair), 2);
+                $session[$name] = trim($pair);
+            }
+        }
+        if ($session !== []) {
+            $provided = [];
+            if (isset($headers['cookie'])) {
+                foreach (explode(';', $headers['cookie'][1]) as $pair) {
+                    if (str_contains($pair, '=')) {
+                        [$name] = explode('=', trim($pair), 2);
+                        $provided[$name] = trim($pair);
+                    }
+                }
+            }
+            $merged = array_values($provided + $session); // provided wins on conflict
+            $headers['cookie'] = ['Cookie', implode('; ', $merged)];
         }
         // Multipart parsing needs CRLF between part headers; a textarea gives LF.
         // Add the CR where it is missing; bodies that already use CRLF are untouched.

@@ -34,6 +34,13 @@ final class Lab
         }
     }
 
+    /** Per-level walkthrough data for the Solution tab, if the lab ships one. */
+    public static function solution(string $slug): ?array
+    {
+        $file = LABS_DIR . "/$slug/solution.php";
+        return is_file($file) ? require $file : null;
+    }
+
     public static function sources(string $slug): array
     {
         $sources = [];

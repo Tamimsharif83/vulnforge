@@ -84,6 +84,11 @@ Open any lab from the dashboard. The workspace is split in two:
   - **Fix** — root cause, the correct fix, and how to hunt the class on real
     targets.
   - **Report** — a filled finding template for the lab.
+  - **Solution** — locked until you have opened every hint. It then reveals, for
+    the current level, the exact steps, why each one works and why the exploit
+    succeeds, and a **Run the exploit** button that loads the real request into
+    the console, sends it to the live server, and shows the result — so you can
+    watch it work when the hints were not enough.
 
 Switch the **security level** (Low / Medium / High / Secure) to see a weak
 filter get bypassed and then closed. Solving a level is detected from real

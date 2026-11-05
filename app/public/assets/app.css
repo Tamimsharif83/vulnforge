@@ -100,3 +100,9 @@ summary { cursor: pointer; }
 table.map { width: 100%; border-collapse: collapse; margin-top: 10px; }
 table.map th, table.map td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
 table.map th { color: var(--muted); font-weight: 600; }
+.tabs button.locked { opacity: .45; }
+.tabs button.locked::after { content: " \00b7 locked"; font-size: 11px; color: var(--muted); }
+.sol-steps { padding-left: 20px; }
+.sol-steps li { margin: 6px 0; }
+#run-solution { margin-top: 4px; }
+#run-status { min-height: 1em; }

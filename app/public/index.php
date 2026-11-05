@@ -11,7 +11,8 @@ if ($path === '/') {
 } elseif ($path === '/learn') {
     render('learn', ['labs' => Lab::all()]);
 } elseif (preg_match('#^/labs/([a-z0-9-]+)$#', $path, $m) && ($lab = Lab::find($m[1]))) {
-    render('workspace', ['lab' => $lab, 'solved' => Lab::solvedLevels()[$m[1]] ?? []]);
+    $solution = Lab::solution($m[1])[current_level()] ?? null;
+    render('workspace', ['lab' => $lab, 'solved' => Lab::solvedLevels()[$m[1]] ?? [], 'solution' => $solution]);
 } elseif (preg_match('#^/labs/([a-z0-9-]+)/run$#', $path, $m) && Lab::find($m[1])) {
     Lab::run($m[1]);
 } elseif (preg_match('#^/labs/([a-z0-9-]+)/source$#', $path, $m) && Lab::find($m[1])) {

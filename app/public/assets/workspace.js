@@ -182,3 +182,48 @@ fetch(`/labs/${slug}/source`).then((response) => response.json()).then((data) =>
   sources = data;
   renderSource();
 });
+
+// Solution tab: unlocks once every hint has been opened, then offers a live run.
+(function solutionTab() {
+  const tab = $('solution-tab');
+  if (!tab) return;
+  const key = `vf-sol-${slug}`;
+  const unlock = () => {
+    tab.classList.remove('locked');
+    tab.removeAttribute('title');
+    const locked = $('solution-locked');
+    if (locked) locked.hidden = true;
+    const body = $('solution-body');
+    if (body) body.hidden = false;
+    localStorage.setItem(key, '1');
+  };
+  if (localStorage.getItem(key)) unlock();
+
+  const hints = document.querySelectorAll('[data-panel="hints"] details');
+  const opened = new Set();
+  hints.forEach((hint, i) => {
+    hint.addEventListener('toggle', () => {
+      if (hint.open) opened.add(i);
+      if (hints.length && opened.size >= hints.length) unlock();
+    });
+  });
+
+  const run = $('run-solution');
+  if (run) {
+    run.addEventListener('click', async () => {
+      const requests = JSON.parse(run.dataset.run);
+      showTab('console');
+      for (const req of requests) {
+        $('method').value = (req.method || 'GET').toUpperCase();
+        $('path').value = req.path || '/';
+        $('headers').value = req.headers || '';
+        $('body').value = req.body || '';
+        await send();
+      }
+      // Refresh the live feature so stored or state-changing effects are visible.
+      const frame = document.querySelector('.feature iframe');
+      if (frame) frame.src = frame.src;
+      showTab('trace');
+    });
+  }
+})();

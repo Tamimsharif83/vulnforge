@@ -100,6 +100,28 @@ methodology, a report template, CVSS basics, responsible-disclosure ethics, and
 where to go next (HackerOne, Bugcrowd, Intigriti, PortSwigger, and WordPress
 plugin CVEs via Patchstack and Wordfence).
 
+## Logging for blue-team practice
+
+VulnForge can produce **standard-format logs (ECS JSON Lines)** so you can attack
+it, then analyze its logs in any SIEM-style tool (Elastic, Wazuh, Splunk). The
+logs are observational and carry **no attack/lab/difficulty labels** — detection
+is earned from the evidence. Logging is enabled by default and writes to the
+host-readable `logs/` directory:
+
+- `logs/access.jsonl` — rich ECS record per request (incl. web-shell requests),
+- `logs/app-events.jsonl` — security events (logins, command exec, file reads,
+  outbound requests, DB errors, …), joined by `http.request.id`,
+- `logs/server-access.log` — the raw nginx combined proxy log.
+
+```bash
+tail -f logs/access.jsonl | jq .
+scripts/mark-exercise.sh "sqli sweep" start   # ground-truth markers (separate file)
+scripts/rotate-lab-logs.sh                    # archive + start fresh
+```
+
+See **[docs/logging.md](docs/logging.md)** for the full field reference, example
+lines, environment variables, and a five-minute walkthrough.
+
 ## What's inside
 
 Services (`docker-compose.yml`):

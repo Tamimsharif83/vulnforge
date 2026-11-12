@@ -192,6 +192,20 @@ echo "Logger engine tests\n";
     unset($_SERVER['HTTP_X_REQUEST_ID']);
 })();
 
+// 11) Overhead stays small: many writes complete quickly.
+(function () {
+    Logger::resetForTests();
+    Logger::init(['dir' => tmpdir()]);
+    $base = Logger::ecsBase('vulnforge.access') + ['http.request.method' => 'GET', 'url.path' => '/x'];
+    $start = microtime(true);
+    for ($i = 0; $i < 1000; $i++) {
+        Logger::write('access.jsonl', $base + ['n' => $i]);
+    }
+    $elapsed = microtime(true) - $start;
+    // Very generous bound: 1000 line-writes (with locking) should be well under this.
+    check($elapsed < 5.0, sprintf('1000 writes complete quickly (%.3fs < 5s)', $elapsed));
+})();
+
 // ---------------------------------------------------------------------------
 $total = $GLOBALS['t_total'];
 $fail = $GLOBALS['t_fail'];

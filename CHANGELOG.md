@@ -51,3 +51,11 @@ a response, alters a lab, or labels traffic as malicious.
   `scripts/mark-exercise.sh "<name>" start|end` records ground-truth markers to a
   separate `logs/exercise-markers.jsonl` (never into the access or app-event
   logs). `logs/` is git-ignored except for a `.gitkeep`.
+- **Phase 7 — documentation & tests.** `docs/logging.md` (field reference,
+  example lines, environment variables, redaction trade-off, how to read the
+  logs, and a five-minute walkthrough), a README "Logging for blue-team practice"
+  section, and `make test` / `make rotate-logs` / `make loglive` targets. The
+  plain-PHP suites (`tests/LoggerTest.php`, `tests/AppEventsTest.php`) cover
+  required fields and types, body truncation and hostile-payload handling, JSON
+  validity under newlines/quotes/unicode/NUL, fail-safe behavior, redaction,
+  rotation, and overhead.

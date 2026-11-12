@@ -6,6 +6,14 @@ if (is_array($claims) && ($claims['role'] ?? '') === 'admin') {
     Lab::markSolved('jwt-session', current_level());
     Trace::note('Accepted a token asserting role=admin. The server never issues admin tokens, so this is a forgery.');
 }
+if ($token !== '') {
+    if (is_array($claims)) {
+        Logger::setUser((string) ($claims['user'] ?? 'unknown'));
+        AppEvents::auth('user-login', 'success', (string) ($claims['user'] ?? 'unknown'));
+    } else {
+        AppEvents::auth('user-login', 'failure', null, 'token-rejected');
+    }
+}
 header('Content-Type: text/html');
 echo '<!DOCTYPE html><title>ForgeShop API</title><link rel="stylesheet" href="/assets/shop.css?v=2">' . shop_header('Account') . '<h1>Account API</h1>';
 if (is_array($claims)) {

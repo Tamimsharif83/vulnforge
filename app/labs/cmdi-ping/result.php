@@ -2,6 +2,7 @@
 // Shared view. Runs the command the level built and shows the output.
 Trace::step('Shell command executed', $cmd, $host ?? '');
 $output = (string) shell_exec($cmd . ' 2>&1');
+AppEvents::commandExec($cmd . ' 2>&1');
 if (str_contains($output, trim((string) @file_get_contents(SECRET_FILE)))) {
     Lab::markSolved('cmdi-ping', current_level());
 }

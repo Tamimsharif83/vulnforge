@@ -7,6 +7,15 @@ if ($ok && md5($submitted) !== ($user['password_md5'] ?? '')) {
     Lab::markSolved('sqli-login', current_level());
     Trace::note('Auth bypass: a user row was returned although the password did not match its stored hash.');
 }
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+    $attempted = (string) ($_POST['username'] ?? '');
+    if ($ok) {
+        Logger::setUser((string) ($user['username'] ?? $attempted), isset($user['id']) ? (string) $user['id'] : null);
+        AppEvents::auth('user-login', 'success', (string) ($user['username'] ?? $attempted));
+    } else {
+        AppEvents::auth('user-login', 'failure', $attempted, 'invalid-credentials');
+    }
+}
 ?>
 <!DOCTYPE html>
 <title>ForgeShop Login</title>

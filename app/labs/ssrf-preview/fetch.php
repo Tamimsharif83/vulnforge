@@ -8,6 +8,11 @@ function ssrf_fetch(string $url): string
     $resolved = $host !== '(none)' ? gethostbyname($host) : '(none)';
     Trace::step('Server-side request', "GET $url  (host $host resolves to $resolved)", $url);
     $body = @file_get_contents($url, false, $ctx);
+    $status = null;
+    if (isset($http_response_header[0]) && preg_match('#\s(\d{3})\s#', $http_response_header[0], $m)) {
+        $status = (int) $m[1];
+    }
+    AppEvents::outbound($url, $host === '(none)' ? null : $host, $resolved === '(none)' ? null : $resolved, $status);
     return $body === false ? '(request failed)' : $body;
 }
 function ssrf_show(string $body): void

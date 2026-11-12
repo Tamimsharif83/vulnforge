@@ -28,6 +28,7 @@ final class Db
             return $rows;
         } catch (PDOException $error) {
             Trace::sql($sql, $input, 0, microtime(true) - $started, $error->getMessage());
+            AppEvents::dbError($error->getCode() ? 'SQLSTATE[' . $error->getCode() . ']' : get_class($error), $error->getMessage());
             throw $error;
         }
     }
@@ -36,9 +37,14 @@ final class Db
     public static function prepared(string $sql, array $params = []): array
     {
         $started = microtime(true);
-        $statement = self::pdo()->prepare($sql);
-        $statement->execute($params);
-        $rows = $statement->fetchAll();
+        try {
+            $statement = self::pdo()->prepare($sql);
+            $statement->execute($params);
+            $rows = $statement->fetchAll();
+        } catch (PDOException $error) {
+            AppEvents::dbError($error->getCode() ? 'SQLSTATE[' . $error->getCode() . ']' : get_class($error), $error->getMessage());
+            throw $error;
+        }
         Trace::sql($sql, '', count($rows), microtime(true) - $started, null, $params);
         return $rows;
     }

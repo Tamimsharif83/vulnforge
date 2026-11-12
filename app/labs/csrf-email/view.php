@@ -1,4 +1,7 @@
 <?php
+if (!empty($changed)) {
+    AppEvents::iam('user-updated', 'alice', ['vulnforge.account.email' => $email]);
+}
 echo '<!DOCTYPE html><title>Account</title><link rel="stylesheet" href="/assets/shop.css?v=2">' . shop_header('Account') . '<h1>Change email</h1>';
 echo '<p>Current email: <strong>' . e($email) . '</strong></p>';
 if (!empty($changed)) { echo '<p>Email changed by the request.</p>'; }

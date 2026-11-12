@@ -29,3 +29,12 @@ a response, alters a lab, or labels traffic as malicious.
   `X-Forwarded-For`, and the in-browser Attack Console relay forwards the real
   client IP, so console-driven attacks keep their true source address. No
   response headers or lab/difficulty/solved signals are logged.
+- **Phase 3 — application security events (`logs/app-events.jsonl`).** Events
+  the access log cannot show, hooked where the app already performs each action
+  (never changing it): authentication (login success/failure, token accept),
+  account changes (role-changed, user-updated), file upload (path + SHA-256),
+  file read (requested + resolved path), database query errors, server outbound
+  requests (URL, resolved IP, status), OS command execution (command line), and
+  app errors (fatals / HTTP 500). Every event carries the request's
+  `http.request.id` so it joins the access log. Covered by
+  `tests/AppEventsTest.php`.

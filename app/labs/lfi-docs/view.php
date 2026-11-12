@@ -4,6 +4,10 @@ if (str_contains($contents, trim((string) @file_get_contents(SECRET_FILE)))
     || str_contains($contents, 'root:x:0:0:')) {
     Lab::markSolved('lfi-docs', current_level());
 }
+AppEvents::fileRead(
+    (string) ($_GET['doc'] ?? ''),
+    (isset($resolved) && $resolved !== false) ? (string) $resolved : null
+);
 ?>
 <!DOCTYPE html>
 <title>ForgeShop Help</title>

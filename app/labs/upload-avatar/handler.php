@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
         $result = 'Rejected: that file was not accepted at this level.';
     } else {
         move_uploaded_file($tmp, "$dir/$stored");
+        AppEvents::fileUpload("$dir/$stored", $stored, @filesize("$dir/$stored") ?: null, @hash_file('sha256', "$dir/$stored") ?: null);
         $url = '/uploads/' . $stored;
         Trace::step('Stored file', "$dir/$stored", '', 'Served at ' . $url);
         $ext = strtolower(pathinfo($stored, PATHINFO_EXTENSION));

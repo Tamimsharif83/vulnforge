@@ -21,3 +21,7 @@ Thumbs.db
 *.swp
 .claude/skills/impeccable/scripts/bin/
 .claude/settings.local.json
+
+# Blue-team runtime logs (keep the directory, not its contents)
+logs/*
+!logs/.gitkeep

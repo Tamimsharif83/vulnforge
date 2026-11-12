@@ -46,3 +46,8 @@ a response, alters a lab, or labels traffic as malicious.
   environment variables, enabled by default in the compose setup. A small app
   entrypoint makes the bind-mounted log directory writable by the web server user
   and readable from the host. The app remains published on `127.0.0.1` only.
+- **Phase 6 — lab hygiene helpers.** `scripts/rotate-lab-logs.sh` archives the
+  current logs to `logs/archive/<UTC-timestamp>.tar.gz` and starts fresh files;
+  `scripts/mark-exercise.sh "<name>" start|end` records ground-truth markers to a
+  separate `logs/exercise-markers.jsonl` (never into the access or app-event
+  logs). `logs/` is git-ignored except for a `.gitkeep`.

@@ -16,6 +16,7 @@ services:
       - "127.0.0.1:${VULNFORGE_PORT:-8080}:80"
     volumes:
       - ./docker/edge/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./logs:/var/log/nginx/vf
     networks:
       - hostlink
       - labnet

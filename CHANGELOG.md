@@ -38,3 +38,6 @@ a response, alters a lab, or labels traffic as malicious.
   app errors (fatals / HTTP 500). Every event carries the request's
   `http.request.id` so it joins the access log. Covered by
   `tests/AppEventsTest.php`.
+- **Phase 4 — raw proxy log (`logs/server-access.log`).** The edge nginx also
+  writes a standard combined access log into the shared logs directory, so the
+  raw proxy view can be compared with the app's richer ECS log.

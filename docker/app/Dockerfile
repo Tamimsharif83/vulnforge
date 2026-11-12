@@ -21,3 +21,7 @@ RUN mkdir -p /var/www/app/public/uploads \
 RUN mkdir -p /var/www/app/logs \
     && chown www-data:www-data /var/www/app/logs \
     && chmod 2775 /var/www/app/logs
+
+COPY docker/app/entrypoint.sh /usr/local/bin/vf-entrypoint.sh
+RUN chmod +x /usr/local/bin/vf-entrypoint.sh
+CMD ["/usr/local/bin/vf-entrypoint.sh"]

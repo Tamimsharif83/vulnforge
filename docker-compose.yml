@@ -34,6 +34,17 @@ services:
       DB_NAME: forgeshop
       DB_USER: forge
       DB_PASS: forge-local-only
+      # Structured logging (blue-team practice). Enabled by default in the lab.
+      VF_LOG_ENABLED: "true"
+      VF_LOG_DIR: /var/www/app/logs
+      VF_LOG_MAX_BODY_BYTES: "8192"
+      VF_LOG_REDACT_FIELDS: ""
+      VF_TRUSTED_PROXIES: "127.0.0.1,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+      VF_LOG_STDOUT: "false"
+      VF_LOG_ROTATE_BYTES: "20971520"
+      VF_LOG_ROTATE_KEEP: "5"
+    volumes:
+      - ./logs:/var/www/app/logs
     networks:
       - labnet
       - metanet

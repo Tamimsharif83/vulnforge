@@ -41,3 +41,8 @@ a response, alters a lab, or labels traffic as malicious.
 - **Phase 4 — raw proxy log (`logs/server-access.log`).** The edge nginx also
   writes a standard combined access log into the shared logs directory, so the
   raw proxy view can be compared with the app's richer ECS log.
+- **Phase 5 — storage, rotation & Docker.** The log directory is bind-mounted to
+  `./logs` on the host (readable without `docker exec`). Logging is configured by
+  environment variables, enabled by default in the compose setup. A small app
+  entrypoint makes the bind-mounted log directory writable by the web server user
+  and readable from the host. The app remains published on `127.0.0.1` only.

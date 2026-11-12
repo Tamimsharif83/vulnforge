@@ -9,6 +9,7 @@ const SECRET_FILE = '/opt/forge/flag.txt';
 session_name('forge_session');
 session_start();
 
+require_once __DIR__ . '/Logger.php';
 require __DIR__ . '/Db.php';
 require __DIR__ . '/Trace.php';
 require __DIR__ . '/Lab.php';

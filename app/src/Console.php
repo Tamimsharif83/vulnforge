@@ -56,6 +56,16 @@ final class Console
         if ($body !== '') {
             $headers['content-length'] = ['Content-Length', (string) strlen($body)];
         }
+        // Attribute the relayed request to the real client in the access log,
+        // not to this loopback relay. We set X-Forwarded-For ourselves (ignoring
+        // any client-supplied one) so a console-driven attack keeps its source
+        // IP. The app's labs do not read this header, so behavior is unchanged.
+        if (class_exists('Logger')) {
+            $client = Logger::clientIp();
+            if (!empty($client['ip'])) {
+                $headers['x-forwarded-for'] = ['X-Forwarded-For', $client['ip']];
+            }
+        }
         $headers['connection'] = ['Connection', 'close'];
 
         $raw = "$method $path HTTP/1.0\r\n";

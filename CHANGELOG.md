@@ -19,3 +19,13 @@ a response, alters a lab, or labels traffic as malicious.
   `X-Forwarded-For` client-IP resolution, RFC 3339 UTC millisecond timestamps,
   and environment-variable configuration (enabled by default). Covered by
   `tests/LoggerTest.php` (plain PHP, no framework).
+- **Phase 2 — HTTP access log (`logs/access.jsonl`).** One ECS record per
+  request, written via a PHP `auto_prepend_file` so every PHP execution is
+  captured — routed pages and directly-executed uploaded files (web shells)
+  alike. Records carry the full ECS request/response/client/identity set,
+  allowlisted request headers (cookie names only, Authorization scheme only),
+  upload metadata with SHA-256 (never contents), body capture with truncation,
+  and a session hash (never the raw token). The edge proxy now forwards
+  `X-Forwarded-For`, and the in-browser Attack Console relay forwards the real
+  client IP, so console-driven attacks keep their true source address. No
+  response headers or lab/difficulty/solved signals are logged.
